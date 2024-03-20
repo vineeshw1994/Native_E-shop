@@ -3,11 +3,11 @@ import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = ({childern}) => {
+const Layout = ({ childern }) => {
   return (
     <>
-    <StatusBar />
-    <Header/>
+      <StatusBar />
+      <Header />
       <View>{childern}</View>
       <Footer />
     </>
