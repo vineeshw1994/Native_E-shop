@@ -10,12 +10,13 @@ const Header = () => {
     setSearchText('')
   }
   return (
-    <View style={{height: 90, backgroundColor:'lightgray'}}>
+    <View style={{height: 90, backgroundColor:'#2874F0'}}>
       <View style={styles.container}>
-        <TextInput style={styles.inputBox} value={searchText} onChangeText={(text) => setSearchText(text)}/>
+        <TextInput style={styles.inputBox} value={searchText} onChangeText={(text) => setSearchText(text)} placeholder='Search for products' />
         <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
-          <FontAwesome name="search" style={styles.item} />
+          <FontAwesome name="search" style={[styles.item, {color:'#2874F0'}]}  />
         </TouchableOpacity>
+      
       </View>
 
     </View>
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
   },
+  
   inputBox:{
     borderWidth: 1,
     width:'100%',
@@ -37,10 +39,11 @@ const styles = StyleSheet.create({
     left:15,
     height: 40,
     color:'black',
-    borderColor:'black',
+    borderColor:'white',
     paddingLeft: 10,
     fontSize:16,
     borderRadius: 5,
+    backgroundColor:'white'
   },
   searchBtn:{
     position:'absolute',
