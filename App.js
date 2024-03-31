@@ -17,11 +17,11 @@ export default function App() {
           <Stack.Screen name="home" component={Home} options={{
             headersShown: false,
           }}/>
-          <Stack.Screen name='about' component={About} />
+          <Stack.Screen name='categories' component={About} />
           <Stack.Screen name='ProductDetails' component={ProductDetails} />
-          <Stack.Screen name='contact' component={Contact} />
-          <Stack.Screen name='notification' component={Notification} />
-          <Stack.Screen name='settings' component={Setting} />
+          <Stack.Screen name='notification' component={Contact} />
+          <Stack.Screen name='account' component={Notification} />
+          <Stack.Screen name='cart' component={Setting} />
       </Stack.Navigator>
     </NavigationContainer>
 

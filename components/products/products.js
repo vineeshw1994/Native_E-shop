@@ -9,7 +9,7 @@ const Products = () => {
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {products.map((p,index) => (
-       <ProductCard key={p.id} p={p} />
+       <ProductCard key={p._id} p={p} />
       ))}
     </ScrollView>
   )

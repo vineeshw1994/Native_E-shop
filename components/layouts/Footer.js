@@ -11,21 +11,21 @@ const Footer = () => {
         <AntDesign name='home' style={[styles.icon,route.name == 'home' && styles.active]} />
         <Text style={[styles.iconText,route.name== 'home' && styles.active]}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('about')}>
-        <AntDesign name='book'style={[styles.icon,route.name== 'about' && styles.active]} />
-        <Text style={styles.iconText}>About</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('contact')}>
-        <AntDesign name='phone' style={[styles.icon,route.name== 'contact' && styles.active]} />
-        <Text style={styles.iconText}>Contact</Text>
+      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('categories')}>
+        <AntDesign name='bars'style={[styles.icon,route.name== 'categories' && styles.active]} />
+        <Text style={styles.iconText}>Categories</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('notification')}>
-        <AntDesign name='notification' style={[styles.icon,route.name== 'notification' && styles.active]} />
+        <AntDesign name='bells' style={[styles.icon,route.name== 'notification' && styles.active]} />
         <Text style={styles.iconText}>Notification</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('settings')}>
-        <AntDesign name='setting'style={[styles.icon,route.name== 'settings' && styles.active]} />
-        <Text style={styles.iconText}>Settings</Text>
+      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('account')}>
+        <AntDesign name='user' style={[styles.icon,route.name== 'account' && styles.active]} />
+        <Text style={styles.iconText}>Account</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('cart')}>
+        <AntDesign name='shoppingcart'style={[styles.icon,route.name== 'cart' && styles.active]} />
+        <Text style={styles.iconText}>Cart</Text>
       </TouchableOpacity>
     </View>
   )
