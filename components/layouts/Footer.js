@@ -15,8 +15,8 @@ const Footer = () => {
         <AntDesign name='bars'style={[styles.icon,route.name== 'categories' && styles.active]} />
         <Text style={styles.iconText}>Categories</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('notification')}>
-        <AntDesign name='bells' style={[styles.icon,route.name== 'notification' && styles.active]} />
+      <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('notifications')}>
+        <AntDesign name='bells' style={[styles.icon,route.name== 'notifications' && styles.active]} />
         <Text style={styles.iconText}>Notification</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuContainer} onPress={()=>navigation.navigate('account')}>

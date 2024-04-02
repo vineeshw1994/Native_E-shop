@@ -5,7 +5,26 @@ import { userData } from '../data/UserData'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 
-const Notifications = ({ navigation }) => {
+const Account = ({ navigation }) => {
+
+  const isAdmin = true;
+
+  const handleNotification = () => {
+    navigation.navigate('notifications')
+  }
+
+  const handleProfile = () => {
+    navigation.navigate('profile', { id: userData._id })
+  }
+
+  const handleOrders = () => {
+    navigation.navigate('myorders')
+  }
+
+  const handleAdmin = () => {
+    navigation.navigate('adminPannel')
+  }
+
   const handleLogout = () => {
     alert('successfully logout ')
     navigation.navigate('login')
@@ -23,22 +42,22 @@ const Notifications = ({ navigation }) => {
 
         <View style={styles.btnContainer} >
           <Text style={styles.heading}>Account Setting</Text>
-          <TouchableOpacity style={styles.accountBtn}>
+          <TouchableOpacity style={styles.accountBtn} onPress={handleProfile}>
             <AntDesign name='edit' style={styles.accountBtnText} />
             <Text style={styles.accountBtnText}>Edit Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.accountBtn}>
+          <TouchableOpacity style={styles.accountBtn} onPress={handleOrders}>
             <AntDesign name='bars' style={styles.accountBtnText} />
             <Text style={styles.accountBtnText}>My Orders</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.accountBtn}>
+          <TouchableOpacity style={styles.accountBtn} onPress={handleNotification}>
             <AntDesign name='bells' style={styles.accountBtnText} />
             <Text style={styles.accountBtnText}>Notification</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.accountBtn}>
+          {isAdmin && <TouchableOpacity style={styles.accountBtn} onPress={handleAdmin}>
             <AntDesign name='user' style={styles.accountBtnText} />
             <Text style={styles.accountBtnText}>Admin Pannel</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
           <TouchableOpacity style={styles.btn} onPress={handleLogout}>
             <Text style={styles.btnText}>Logout</Text>
           </TouchableOpacity>
@@ -65,8 +84,8 @@ const styles = StyleSheet.create({
   },
   btn: {
     backgroundColor: 'blue',
-    width: '80%',
-    height: 40,
+    width: '40%',
+    height: 35,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -112,4 +131,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Notifications
+export default Account
