@@ -1,7 +1,7 @@
 export const products = [
     {
         _id:1,
-        name:'Galaxy F14 5G (Burgundy, 128 GB)',
+        name:'Galaxy F14 5G ',
         price:20000,
         description:'6.59-inch (16.97 cm)with super charger.',
         category:'mobile',

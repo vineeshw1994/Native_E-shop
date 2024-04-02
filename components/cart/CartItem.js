@@ -1,0 +1,89 @@
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+
+const CartItem = ({ item }) => {
+    const [qty, setQty] = useState(1)
+    const [proDetails, setProDetails] = useState(item)
+    const maxQty = proDetails?.quantity
+
+
+    const handleAddQty = () => {
+        console.log(qty, '===', maxQty)
+        if (qty === 0) {
+          return alert("Out of stock")
+        }
+        if (qty === maxQty) {
+          alert("Maximum quantity reached")
+          return
+        }
+        if (qty <= maxQty) {
+          setQty((prev) => prev + 1);
+        }
+      };
+    
+      const handleReduceQty = () => {
+        if (qty > 1) {
+          setQty((prev) => prev - 1);
+        }
+      };
+    return (
+        <View style={styles.container}>
+            <Image source={{ uri: item?.image }} style={styles.image} />
+            <View>
+                <Text style={styles.name}>{item?.name}</Text>
+                <Text>{item?.price}</Text>
+            </View>
+            <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.btnQty} onPress={handleReduceQty}>
+                    <Text style={styles.symbol}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.btnQtyText}>{qty}</Text>
+                <TouchableOpacity style={styles.btnQty} onPress={handleAddQty}>
+                    <Text style={styles.symbol}>+</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        margin: 10,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+    },
+    image: {
+        width: 80,
+        height: 80,
+        resizeMode: 'contain'
+    },
+    name: {
+        fontSize: 15,
+    },
+    btnQty: {
+        backgroundColor: 'lightgray',
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 10,
+      },
+      btnQtyText: {
+        fontSize: 20,
+    
+      },
+      btnContainer: {
+        flexDirection: 'row',
+        marginTop: 5,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'lightgreen',
+        height: 50,
+    
+      },
+})
+export default CartItem
