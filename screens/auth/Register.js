@@ -23,12 +23,19 @@ const Register = ({ navigation }) => {
         <ScrollView>
             <View style={styles.container}>
                 <Image style={styles.image} source={{ uri: loginImage }} />
+
                 <InputBox placeholder={'Enter Your Name'} autoComplete={"name"} value={name} setValue={setName} />
+
                 <InputBox placeholder={'Enter Your Email'} autoComplete={"email"} value={email} setValue={setEmail} />
+
                 <InputBox placeholder={'Enter Your Password'} secureTextEntry={true} value={password} setValue={setPassword} />
-                <InputBox placeholder={'Enter Your Mobile'} secureTextEntry={true} value={contact} setValue={setContact} autoComplete={'tel'} />
-                <InputBox placeholder={'Enter Your City'} secureTextEntry={true} value={city} setValue={setCity} autoComplete={'country'} />
-                <InputBox placeholder={'Enter Your Address'} secureTextEntry={true} value={address} setValue={setAddress} autoComplete={'address line-1'} />
+
+                <InputBox placeholder={'Enter Your Mobile'}  value={contact} setValue={setContact} autoComplete={'tel'} />
+
+                <InputBox placeholder={'Enter Your City'}  value={city} setValue={setCity} autoComplete={'off'} />
+
+                <InputBox placeholder={'Enter Your Address'}  value={address} setValue={setAddress} autoComplete={'street-address'} />
+
                 <View style={styles.btnContainer}>
                     <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
                         <Text style={styles.btnText}>Register</Text>

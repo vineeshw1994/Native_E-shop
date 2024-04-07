@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Provider } from 'react-redux'
+import store from './redux/store'
 import Home from './screens/Home';
 import About from './screens/About';
 import ProductDetails from './screens/ProductDetails';
@@ -18,11 +20,12 @@ import Dashboard from './screens/Admin/Dashboard';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='login' >
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='login' >
           <Stack.Screen name="home" component={Home} options={{
             headerShown: false,
-          }}/>
+          }} />
           <Stack.Screen name='categories' component={About} />
           <Stack.Screen name='ProductDetails' component={ProductDetails} />
           <Stack.Screen name='notifications' component={Notification} />
@@ -33,13 +36,13 @@ export default function App() {
           <Stack.Screen name='cart' component={Setting} />
           <Stack.Screen name='Checkout' component={Checkout} />
           <Stack.Screen name='Payment' component={Payment} />
-          <Stack.Screen name='login' component={Login} options={{headerShown: false}} />
+          <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
           <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
 
-         
-      </Stack.Navigator>
-    </NavigationContainer>
 
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
