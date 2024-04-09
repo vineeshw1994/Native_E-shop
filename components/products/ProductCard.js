@@ -14,7 +14,7 @@ const ProductCard = ({ p }) => {
   }
   return (
     <View>
-      <View style={styles.card}>
+      <View style={styles.card} key={p._id}>
         <Image source={{ uri: p?.image }} style={styles.cardImage} onError={() => console.log('Error loading image')} />
         <Text style={styles.cardTitle}>{p?.name}</Text>
         <Text style={styles.description}>{p?.description.substring(0, 30)}...</Text>

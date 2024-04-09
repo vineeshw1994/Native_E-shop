@@ -3,6 +3,7 @@ import React from 'react'
 import Layout from '../components/layouts/Layout'
 
 const Notification = () => {
+  console.log('this is notification screen')
   return (
     <Layout>
       <View style={styles.container}>

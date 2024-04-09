@@ -5,10 +5,10 @@ import { products } from '../../data/ProductData'
 
 
 const Products = () => {
-  console.log(products,'product data')
+  // console.log(products,'product data')
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {products.map((p,index) => (
+      {products.map((p) => (
        <ProductCard key={p._id} p={p} />
       ))}
     </ScrollView>

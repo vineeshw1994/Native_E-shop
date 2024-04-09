@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image, } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import InputBox from '../../components/Form/InputBox';
+import Toast from 'react-native-toast-message';
 
 const Login = ({navigation}) => {
     const loginImage = 'https://www.opengatefmmbale.com/images/blog-wp-login.png'
@@ -8,13 +10,52 @@ const Login = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
+
+    const handleLogin = async() => {
+        console.log(email,password,'this is the email and password')
         if (!email || !password) {
-            return alert('Please fill all the fields');
+            return alert('All Fields Are Required')
         }
-        alert('Login Successfully');
-        navigation.navigate('home');
+        if (!/^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,}$/.test(email)) {
+            alert('Invalid email address');
+        }
+        if(password.length < 6){
+           return alert('Password must be at least 6 characters long')
+        }
+        
+        try {
+            const res = await fetch('http://192.168.1.3:8080/api/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                })
+            })
+    
+    
+            if (res.ok) {
+                const data = await res.json();
+                // console.log(data.user,'this is the data')
+                await AsyncStorage.setItem('token', data.token);
+                await AsyncStorage.setItem('user', JSON.stringify(data.user));
+                // await AsyncStorage.setItem('user', JSON.stringify(true));
+                alert('Login successful');
+                navigation.navigate('home');
+            }else{ 
+                const errorData = await res.json();
+                alert(errorData.message);
+            }
+        }catch(error){
+            alert(error.message,'like this')
+        }
+    
+        // navigation.navigate('home');
     }
+
+  
     return (
         <View style={styles.container}>
             <Image style={styles.image} source={{ uri: loginImage }} />

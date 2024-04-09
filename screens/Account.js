@@ -1,12 +1,26 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/layouts/Layout'
 import { userData } from '../data/UserData'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Account = ({ navigation }) => {
+  const [userInfo, setUserInfo] = useState({})
 
+  useEffect(() => {
+    const getuser = async () => {
+      const userString = await AsyncStorage.getItem('user')
+      if(userString){
+        const user = JSON.parse(userString)
+        setUserInfo(user)
+      }
+    }
+
+    getuser()
+  },[])
+  console.log(userInfo, 'this is userinformation')
   const isAdmin = true;
 
   const handleNotification = () => {
@@ -14,7 +28,7 @@ const Account = ({ navigation }) => {
   }
 
   const handleProfile = () => {
-    navigation.navigate('profile', { id: userData._id })
+    navigation.navigate('profile', { id: userInfo._id })
   }
 
   const handleOrders = () => {
@@ -25,18 +39,28 @@ const Account = ({ navigation }) => {
     navigation.navigate('adminPannel')
   }
 
-  const handleLogout = () => {
-    alert('successfully logout ')
-    navigation.navigate('login')
+  const handleLogout = async() => {
+    try {
+      await AsyncStorage.setItem('token', '');
+      await AsyncStorage.setItem('user','');
+      alert('successfully logout ')
+      navigation.navigate('login')
+    } catch (error) {
+      alert(error.message)
+    }
+
   }
   return (
     <Layout>
       <View style={styles.container}>
-        <Image source={{ uri: userData.profilePic }} style={styles.image} />
+     <View style={styles.imageContainer}>
+     <Image source={userInfo.profilePic ? { uri: userInfo.profilePic.url } : null} style={styles.image} />
+     </View>
+        {/* <Image source={{ uri: userInfo.profilePic.url }} style={styles.image} /> */}
         <View style={styles.details}>
-          <Text>Hi <Text style={styles.name}>{userData.name}</Text> ✋</Text>
-          <Text>{userData.email}</Text>
-          <Text>{userData.mobile}</Text>
+          <Text>Hi <Text style={styles.name}>{userInfo.username}</Text> ✋</Text>
+          <Text style={styles.proText}>{userInfo.email}</Text>
+          <Text style={styles.proText}>{userInfo.phone}</Text>
 
         </View>
 
@@ -54,7 +78,7 @@ const Account = ({ navigation }) => {
             <AntDesign name='bells' style={styles.accountBtnText} />
             <Text style={styles.accountBtnText}>Notification</Text>
           </TouchableOpacity>
-          {isAdmin && <TouchableOpacity style={styles.accountBtn} onPress={handleAdmin}>
+          {userInfo.role === 'admin' && <TouchableOpacity style={styles.accountBtn} onPress={handleAdmin}>
             <AntDesign name='user' style={styles.accountBtnText} />
             <Text style={styles.accountBtnText}>Admin Pannel</Text>
           </TouchableOpacity>}
@@ -72,11 +96,21 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
   },
+  imageContainer:{
+    marginBottom: 20,
+    marginHorizontal:"24%",
+    width:'50%',
+    height: 150,
+    borderRadius: 95,
+    backgroundColor:'lightgrey',
+    justifyContent:'center',
+    alignItems:'center',
+  },
   image: {
-    width: '100%',
-    height: 100,
+    width: '90%',
+    height: "90%",
     resizeMode: 'contain',
-    borderRadius: 10,
+    borderRadius: 100,
   },
   details: {
     justifyContent: 'center',
@@ -99,6 +133,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 20,
     color: 'green'
+  },
+  proText:{
+    fontSize: 20,
+    color: 'black',
+
   },
   btnContainer: {
     padding: 10,

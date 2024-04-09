@@ -9,7 +9,7 @@ import Header from '../components/layouts/Header.js'
 
 
 const Home = () => {
-  console.log(products)
+  // console.log(products)
   return (
     <Layout>
       <Header />
