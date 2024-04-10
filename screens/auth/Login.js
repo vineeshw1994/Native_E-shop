@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image, } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import InputBox from '../../components/Form/InputBox';
-import Toast from 'react-native-toast-message';
 
 const Login = ({navigation}) => {
     const loginImage = 'https://www.opengatefmmbale.com/images/blog-wp-login.png'

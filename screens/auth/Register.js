@@ -1,7 +1,8 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Button } from 'react-native'
 import React, { useState } from 'react'
 import InputBox from '../../components/Form/InputBox';
-import ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
+
 const Register = ({ navigation }) => {
     const loginImage = 'https://www.opengatefmmbale.com/images/blog-wp-login.png'
 
@@ -12,32 +13,27 @@ const Register = ({ navigation }) => {
     const [city, setCity] = useState('');
     const [contact, setContact] = useState('');
 
-    const [imageData, setImageData] = useState(null);
+    const [file, setFile] = useState(null);
+    const [image, setImage] = useState(null);
+    const [error, setError] = useState(null);
 
-    const selectImage = () => {
-        const options = {
-            title: 'Select Image',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
+    const pickImage = async () => {
 
-        ImagePicker.showImagePicker(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else {
-                const source = { uri: response.uri };
-                setImageData(source);
-                uploadImage(response);
-            }
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
         });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
     };
 
 
-    const handleRegister = () => {
+
+    const handleRegister = async () => {
         if (!email || !password || !name || !address || !city || !contact) {
             return alert('Please fill all the fields');
         }
@@ -50,8 +46,41 @@ const Register = ({ navigation }) => {
         if (contact.length != 10) {
             return alert('Please enter a valid contact number');
         }
-        alert('Register  Successfully ');
-        navigation.navigate('login');
+
+        const formData = new FormData();
+        formData.append('file', {
+            uri: image,
+            name: 'photo.jpg',
+            type: 'image/jpeg',
+        });
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("address", address);
+        formData.append("city", city);
+        formData.append("contact", contact);
+
+        try {
+            alert('try block')
+            const res = await fetch('http://192.168.1.4:8080/api/user/register', {
+
+                method: 'POST',
+                body: formData,
+            })
+            if (res.ok) {
+                // console.log('success')
+                const data = await res.json();
+                console.log(data);
+                setImage(null);
+                alert('Register  Successfully ');
+                navigation.navigate('login');
+            }
+        } catch (error) {
+            console.log(error)
+            alert('login failed')
+        }
+
+
     }
     return (
         <ScrollView>
@@ -69,9 +98,13 @@ const Register = ({ navigation }) => {
                 <InputBox placeholder={'Enter Your City'} value={city} setValue={setCity} autoComplete={'off'} />
 
                 <InputBox placeholder={'Enter Your Address'} value={address} setValue={setAddress} autoComplete={'street-address'} />
-                <Button title="Upload  Image" onPress={selectImage} />
-                {imageData && <Image source={imageData} style={{ width: 200, height: 200 }} />}
 
+                {image && <Image source={{ uri: image }} style={styles.showImage} />}
+                <View style={styles.imgUploadContainer}>
+                <Button style={styles.uploadImg} title="Choose Image" onPress={pickImage} />
+                </View>
+                
+                
                 <View style={styles.btnContainer}>
                     <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
                         <Text style={styles.btnText}>Register</Text>
@@ -98,7 +131,7 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         backgroundColor: 'blue',
-        width: '80%',
+        width: '60%',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
@@ -121,6 +154,52 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '500',
         color: 'black',
+    },
+    button: {
+        backgroundColor: "#007AFF",
+        width: "80%",
+        padding: 10,
+        borderRadius: 8,
+        marginBottom: 16,
+        shadowColor: "#000000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
+        elevation: 5,
+        marginHorizontal: 40,
+
+    },
+    buttonText: {
+        color: "#FFFFFF",
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: 'center'
+    },
+    showImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+    },
+  
+    imageContainer: {
+        borderRadius: 8,
+        marginBottom: 16,
+        shadowColor: "#000000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    uploadImg: {
+        backgroundColor: "#007AFF",
+        width: "80%",
+        padding: 10,    
+        height: 40,
+    },
+    imgUploadContainer:{
+        marginHorizontal: 40,
+        marginVertical: 5,
+        borderRadius: 10,
     }
 })
 
