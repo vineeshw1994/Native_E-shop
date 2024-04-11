@@ -13,9 +13,7 @@ const Register = ({ navigation }) => {
     const [city, setCity] = useState('');
     const [contact, setContact] = useState('');
 
-    const [file, setFile] = useState(null);
     const [image, setImage] = useState(null);
-    const [error, setError] = useState(null);
 
     const pickImage = async () => {
 
@@ -61,23 +59,28 @@ const Register = ({ navigation }) => {
         formData.append("contact", contact);
 
         try {
-            alert('try block')
             const res = await fetch('http://192.168.1.4:8080/api/user/register', {
 
                 method: 'POST',
                 body: formData,
             })
             if (res.ok) {
-                // console.log('success')
+                const data = await res.json();
+                // console.log(data);
+                setImage(null);
+                alert(data.message);
+                navigation.navigate('login');
+            }
+            if(!res.ok){
+                console.log('failed')
                 const data = await res.json();
                 console.log(data);
-                setImage(null);
-                alert('Register  Successfully ');
-                navigation.navigate('login');
+                alert(data.message);
+                navigation.navigate('register');
             }
         } catch (error) {
             console.log(error)
-            alert('login failed')
+            alert('Register  Failed')
         }
 
 
@@ -93,15 +96,17 @@ const Register = ({ navigation }) => {
 
                 <InputBox placeholder={'Enter Your Password'} secureTextEntry={true} value={password} setValue={setPassword} />
 
-                <InputBox placeholder={'Enter Your Mobile'} value={contact} setValue={setContact} autoComplete={'tel'} />
+                <InputBox placeholder={'Enter Your Mobile'} type='tel' value={contact} setValue={setContact} autoComplete={'tel'} />
 
                 <InputBox placeholder={'Enter Your City'} value={city} setValue={setCity} autoComplete={'off'} />
 
                 <InputBox placeholder={'Enter Your Address'} value={address} setValue={setAddress} autoComplete={'street-address'} />
 
-                {image && <Image source={{ uri: image }} style={styles.showImage} />}
+                
                 <View style={styles.imgUploadContainer}>
                 <Button style={styles.uploadImg} title="Choose Image" onPress={pickImage} />
+                {image && <Image source={{ uri: image }} style={styles.showImage} />}
+               
                 </View>
                 
                 
@@ -176,8 +181,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     showImage: {
-        width: 100,
-        height: 100,
+        width: 80,
+        height: 80,
         borderRadius: 10,
     },
   
@@ -197,6 +202,9 @@ const styles = StyleSheet.create({
         height: 40,
     },
     imgUploadContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginHorizontal: 40,
         marginVertical: 5,
         borderRadius: 10,
