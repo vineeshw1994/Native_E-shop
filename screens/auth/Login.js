@@ -21,9 +21,8 @@ const Login = ({navigation}) => {
         if(password.length < 6){
            return alert('Password must be at least 6 characters long')
         }
-        
         try {
-            const res = await fetch('http://192.168.1.3:8080/api/user/login', {
+            const res = await fetch('http://192.168.1.4:8080/api/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,7 +32,7 @@ const Login = ({navigation}) => {
                     password,
                 })
             })
-    
+    console.log('after res')
     
             if (res.ok) {
                 const data = await res.json();

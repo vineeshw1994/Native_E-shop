@@ -5,13 +5,14 @@ import Layout from '../../components/layouts/Layout'
 import { userData } from '../../data/UserData'
 import InputBox from '../../components/Form/InputBox'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
+
 
 const Profile = ({ navigation }) => {
     const route = useRoute();
     const { id } = route.params;
     console.log('this is the user id', id)
     const [name, setName] = useState('');
-    const [profilePic, setProfilePic] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
@@ -19,6 +20,22 @@ const Profile = ({ navigation }) => {
     const [contact, setContact] = useState(0);
 
     const [userInfo, setUserInfo] = useState({})
+
+    const [image, setImage] = useState(null);
+
+    const pickImage = async () => {
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
 
     useEffect(() => {
         const getuser = async () => {
@@ -34,69 +51,95 @@ const Profile = ({ navigation }) => {
     console.log(userInfo, 'this is userinformation')
 
     const hadleUpdate = async () => {
-        if (!email || !name || !address || !city || !contact) {
-            return alert('Please fill all the fields');
+        console.log('one')
+        if (name && name.length < 3) {
+            return alert('Please enter your name');
         }
-        if (!/^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,}$/.test(email)) {
+
+        if (email && !/^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,}$/.test(email)) {
             alert('Invalid email address');
+            return;
         }
-        if (password.length < 6) {
-            return alert('Password must be at least 6 characters long')
+
+        if (password && password.length < 6) {
+            return alert('Password must be at least 6 characters long');
         }
-        if (contact.length != 10) {
+
+        if (contact && contact.length !== 10) {
             return alert('Please enter a valid contact number');
         }
 
+        // Create formData with updated fields
+        const formData = new FormData();
+        if (image) {
+            formData.append('file', {
+                uri: image,
+                name: 'photo.jpg',
+                type: 'image/jpeg',
+            });
+        }
+       if(name){
+        formData.append("name", name);
+       }
+       if(email){
+        formData.append("email", email);
+
+       }
+        if (password) {
+            formData.append("password", password);
+        }
+        if (address) {
+            formData.append("address", address);
+        }
+        if (city) {
+            formData.append("city", city);
+        }
+        if (contact) {
+            formData.append("contact", contact);
+        }
+
         try {
-            const res = await fetch('http://192.168.1.3:8080/api/user/profile-update', {
+            const res = await fetch('http://192.168.1.4:8080/api/user/profile-update', {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                    name,
-                    contact,
-                    city,
-                    address
-                })
+                body: formData,
             })
             if (res.ok) {
                 const data = await res.json();
-                // console.log(data.user,'this is the data')
                 await AsyncStorage.setItem('user', JSON.stringify(data.data));
-                alert('Login successful');
-                navigation.navigate('home');
+                alert(data.message);
+                navigation.navigate('account');
             } else {
                 const errorData = await res.json();
                 alert(errorData.message);
             }
         } catch (error) {
-            alert(error.message, 'like this')
+            alert(error.message);
         }
     }
+
     return (
         <Layout>
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.imageContainer}>
-                        <Image source={userInfo.profilePic ? { uri: userInfo.profilePic.url } : null} style={styles.image} />
-                        <Pressable onPress={() => alert('profile dailogbox')}>
+                        {image ? (
+                            <Image source={{ uri: image }} style={styles.image} />
+                        ) : (
+                            userInfo && (
+                                <Image source={userInfo.profilePic ? { uri: userInfo.profilePic.url } : null} style={styles.image} />
+                            )
+                        )}
+                        <Pressable onPress={pickImage}>
                             <Text style={{ color: 'green' }}>Change Profile Picture</Text>
                         </Pressable>
                     </View>
-                    <InputBox value={userInfo.username} setValue={setName} placeholder={'Enter your name'} autoComplete={'name'} />
+                    <InputBox value={name} setValue={setName} placeholder={'Enter your name'} autoComplete={'name'} />
+                    <InputBox value={email} setValue={setEmail} placeholder={'Enter your email'} autoComplete={'email'} />
+                    <InputBox value={contact.toString()} setValue={setContact} keyboardType={'number-pad'} placeholder={'Enter your mobile'} autoComplete={'tel'} />
+                    <InputBox secureTextEntry={true} value={password} setValue={setPassword} placeholder={'Enter your password'} autoComplete={'password'} />
+                    <InputBox value={city} setValue={setCity} placeholder={'Enter your city'} autoComplete={'country'} />
+                    <InputBox value={address} setValue={setAddress} placeholder={'Enter your address'} autoComplete={'address line-1'} />
 
-                    <InputBox value={userInfo.email} setValue={setEmail} placeholder={'Enter your email'} autoComplete={'email'} />
-
-                    <InputBox value={userInfo.phone} setValue={setContact} keyboardType={Number} placeholder={'Enter your mobile'} autoComplete={'tel'} />
-
-                    <InputBox value={password} setValue={setPassword} placeholder={'Enter your password'} autoComplete={'password'} secureTextEntry={true} />
-
-                    <InputBox value={userInfo.city} setValue={setCity} placeholder={'Enter your city'} autoComplete={'country'} />
-
-                    <InputBox value={userInfo.address} setValue={setAddress} placeholder={'Enter your address'} autoComplete={'address line-1'} />
 
                     <TouchableOpacity onPress={hadleUpdate} style={styles.updateBtn}>
                         <Text style={styles.btnUpdateText}>Update Profile</Text>

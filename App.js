@@ -16,31 +16,43 @@ import MyOrders from './screens/Account/MyOrders';
 import Dashboard from './screens/Admin/Dashboard';
 import ForgotPassword from './screens/Account/ForgotPassword';
 import Otp from './screens/Account/Otp';
+import Products from './screens/Admin/Products';
+import Categories from './screens/Admin/Categories';
+import Users from './screens/Admin/Users';
+import Orders from './screens/Admin/Orders';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName='login' >
-            <Stack.Screen name="home" component={Home} options={{
-              headerShown: false,
-            }} />
-            <Stack.Screen name='categories' component={About} />
-            <Stack.Screen name='ProductDetails' component={ProductDetails} />
-            <Stack.Screen name='notifications' component={Notification} />
-            <Stack.Screen name='account' component={Account} />
-            <Stack.Screen name='profile' component={Profile} />
-            <Stack.Screen name='forgot' component={ForgotPassword} />
-            <Stack.Screen name='otp' component={Otp} />
-            <Stack.Screen name='myorders' component={MyOrders} />
-            <Stack.Screen name='adminPannel' component={Dashboard} />
-            <Stack.Screen name='cart' component={Setting} />
-            <Stack.Screen name='Checkout' component={Checkout} />
-            <Stack.Screen name='Payment' component={Payment} />
-            <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
-            <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
-          </Stack.Navigator>
-        </NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='login' >
+        <Stack.Screen name="home" component={Home} options={{
+          headerShown: false,
+        }} />
+        <Stack.Screen name='categories' component={About} />
+        <Stack.Screen name='ProductDetails' component={ProductDetails} />
+        <Stack.Screen name='notifications' component={Notification} />
+        <Stack.Screen name='account' component={Account} options={{
+          headerShown: false,
+        }} />
+        <Stack.Screen name='profile' component={Profile} options={{
+          headerShown: false,
+        }} />
+        <Stack.Screen name='forgot' component={ForgotPassword} />
+        <Stack.Screen name='otp' component={Otp} />
+        <Stack.Screen name='myorders' component={MyOrders} />
+        <Stack.Screen name='adminPannel' component={Dashboard} />
+        <Stack.Screen name='products' component={Products} />
+        <Stack.Screen name='category' component={Categories} />
+        <Stack.Screen name='users' component={Users} />
+        <Stack.Screen name='orders' component={Orders} />
+        <Stack.Screen name='cart' component={Setting} />
+        <Stack.Screen name='Checkout' component={Checkout} />
+        <Stack.Screen name='Payment' component={Payment} />
+        <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

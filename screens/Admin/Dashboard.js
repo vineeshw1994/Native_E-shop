@@ -4,26 +4,26 @@ import Layout from '../../components/layouts/Layout'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 
-const Dashboard = () => {
+const Dashboard = ({navigation}) => {
     return (
         <Layout>
             <View style={styles.main}>
                 <Text style={styles.heading}>Dashboard</Text>
                 <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('products')}>
                         <AntDesign name='edit' style={styles.icon} />
                         <Text style={styles.btnText}>Manage Products</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('category')}>
                         <AntDesign name='bars' style={styles.icon} />
                         <Text style={styles.btnText}>Manage Categories</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('users')}>
                         <AntDesign name='user' style={styles.icon} />
                         <Text style={styles.btnText}>Manage Users</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn}>
-                        <AntDesign name='first-order' style={styles.icon} />
+                    <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('orders')}>
+                        <AntDesign name='edit' style={styles.icon} />
                         <Text style={styles.btnText}>Manage Orders</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btn}>

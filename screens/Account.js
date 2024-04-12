@@ -20,7 +20,7 @@ const Account = ({ navigation }) => {
 
     getuser()
   },[])
-  console.log(userInfo, 'this is userinformation')
+  // console.log(userInfo, 'this is userinformation')
   const isAdmin = true;
 
   const handleNotification = () => {

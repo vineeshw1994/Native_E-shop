@@ -32,7 +32,7 @@ const Register = ({ navigation }) => {
 
 
     const handleRegister = async () => {
-        if (!email || !password || !name || !address || !city || !contact) {
+        if (!email || !password || !name || !address || !city || !contact || !image) {
             return alert('Please fill all the fields');
         }
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
