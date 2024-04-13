@@ -1,18 +1,41 @@
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { products } from '../data/ProductData'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProductDetails = ({ route }) => {
   const { params } = route
+  console.log(params)
   const [proDetails, setProDetails] = useState({})
   const [qty, setQty] = useState(1)
-  const maxQty = proDetails?.quantity
+  const maxQty = proDetails?.stock
 
+ console.log(qty,'this is final quantity')
 
   useEffect(() => {
-    const getProduct = products.find((item) => item?._id === params?._id)
-    setProDetails(getProduct)
+    const getProducts = async () => {
+      try {
+        const res = await fetch(`http://192.168.1.4:8080/api/product/${params._id}`, {
+          method: 'GET',
+        })
+        if (res.ok) {
+          const data = await res.json();
+          console.log(data.product)
+          setProDetails(data.product)
+        }
+        if (!res.ok) {
+          const data = await res.json();
+          console.log(data.message)
+          alert(data.message)
+        }
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getProducts()
   }, [params?._id])
+
+  console.log(proDetails)
 
   const handleAddQty = () => {
     console.log(qty, '===', maxQty)
@@ -33,17 +56,53 @@ const ProductDetails = ({ route }) => {
       setQty((prev) => prev - 1);
     }
   };
+  handleAddtoCart = async () => {
+    console.log('add to cart')
+    try{
+    const res = await fetch(`http://192.168.1.4:8080/api/product/addtocart/${params._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        qty
+    })
+    })
+    if(res.ok){
+      const data = await res.json()
+      console.log(data.message)
+      alert(data.message)
+    }
+    if(!res.ok){
+      const data = await res.json()
+      console.log(data.message)
+      alert(data.message)
+    }
+    }catch(error){
+      console.log(error)
+    }
+  }
   return (
     <ScrollView >
-      <Image source={{ uri: proDetails?.image }} style={styles.image} />
       <View style={styles.container}>
+        {proDetails.images ? (
+          proDetails.images.map((image, _id) => (
+            <Image
+              key={_id}
+              source={{ uri: image.url }}
+              style={styles.image}
+            />
+          ))
+        ) : (
+          <Text>Loading images...</Text>
+        )}
         <Text style={styles.title}>{proDetails?.name}</Text>
         <Text style={styles.price} >{proDetails?.price} -₹</Text>
         <Text style={styles.description}>{proDetails?.description}</Text>
         <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.btnCard} disabled={proDetails?.quantity <= 0} onPress={() => { }}>
+          <TouchableOpacity style={styles.btnCard} disabled={proDetails?.stock <= 0} onPress={handleAddtoCart}>
 
-            <Text style={styles.btnCardText}>{proDetails.quantity > 0 ? "Add to Cart" : " Out of Stock"}</Text>
+            <Text style={styles.btnCardText}>{proDetails.stock > 0 ? "Add to Cart" : " Out of Stock"}</Text>
 
           </TouchableOpacity>
           <View style={styles.btnContainer}>

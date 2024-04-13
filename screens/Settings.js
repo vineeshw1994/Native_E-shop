@@ -1,14 +1,35 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/layouts/Layout'
-import { cartData } from '../data/CartData'
 import PriceTable from '../components/cart/PriceTable'
 import CartItem from '../components/cart/CartItem'
 
 
 const Settings = ({navigation}) => {
-  
-  const [cartItems, setCartItems] = useState(cartData);
+   const [cartItems, setCartItems] = useState([]);
+
+   useEffect(() => {
+     const cartItems = async () => {
+       try{
+        const res = await fetch(`http://192.168.1.4:8080/api/product/getcartitems`, {
+          method: 'GET',
+        })
+        if(res.ok){
+          const data = await res.json();
+          setCartItems(data.cartItems);
+
+        }
+        if(!res.ok){
+          const data = await res.json();
+          console.log(data.message)
+        }
+       }catch(error){
+         console.log(error);
+         alert(error.message);
+       }
+     }
+     cartItems();
+   },[])
   return (
     <Layout>
       <View>
@@ -29,8 +50,8 @@ const Settings = ({navigation}) => {
               </ScrollView>
               <View>
                 <PriceTable title={'price'} price={999} />
-                <PriceTable title={'Tax'} price={999} />
-                <PriceTable title={'Shipping'} price={999} />
+                <PriceTable title={'Tax'} tax={0} />
+                <PriceTable title={'Shipping'} shipping={0} />
 
                 <View style={styles.grandTotal}>
                   <PriceTable title={'Grand Total'} price={1000}></PriceTable>

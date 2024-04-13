@@ -15,7 +15,13 @@ const ProductCard = ({ p }) => {
   return (
     <View>
       <View style={styles.card} key={p._id}>
-        <Image source={{ uri: p?.image }} style={styles.cardImage} onError={() => console.log('Error loading image')} />
+      {p.images.map((image, index) => (
+        <Image
+          key={index}
+          source={{ uri: image.url }}
+          style={styles.cardImage}
+        />
+      ))}
         <Text style={styles.cardTitle}>{p?.name}</Text>
         <Text style={styles.description}>{p?.description.substring(0, 30)}...</Text>
 
@@ -48,17 +54,17 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   cardImage: {
-    height: 200,
+    height: 160,
     width: '100%',
     marginBottom: 10,
   },
   cardTitle: {
-    fontSize: 10,
+    fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   description: {
-    fontSize: 10,
+    fontSize: 13,
     textAlign: 'left',
 
   },
